@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 
 var connectionString = "server=localhost;user=root;password=1949;database=carsrent";
@@ -16,7 +17,13 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+app.UseRouting();
 
+if (app.Environment.IsDevelopment())
+{
+    app.MapGet("/debug/routes", (IEnumerable<EndpointDataSource> endpointSources) =>
+        string.Join("\n", endpointSources.SelectMany(source => source.Endpoints)));
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -1,124 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CarsRental.Data;
-using CarsRental.Models;
 
-namespace CarsRental.Controllers
+namespace Cars_Location.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class RentsController : ControllerBase
     {
-        private readonly CarsRentalContext _context;
-
-        public RentsController(CarsRentalContext context)
-        {
-            _context = context;
-        }
-
-        // GET: api/Rents
+        // GET: api/<RentsController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rent>>> GetRent()
+        public IEnumerable<string> Get()
         {
-          if (_context.Rent == null)
-          {
-              return NotFound();
-          }
-            return await _context.Rent.ToListAsync();
+            return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Rents/5
+        // GET api/<RentsController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Rent>> GetRent(int id)
+        public string Get(int id)
         {
-          if (_context.Rent == null)
-          {
-              return NotFound();
-          }
-            var rent = await _context.Rent.FindAsync(id);
-
-            if (rent == null)
-            {
-                return NotFound();
-            }
-
-            return rent;
+            return "value";
         }
 
-        // PUT: api/Rents/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRent(int id, Rent rent)
-        {
-            if (id != rent.RentId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(rent).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Rents
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST api/<RentsController>
         [HttpPost]
-        public async Task<ActionResult<Rent>> PostRent(Rent rent)
+        public void Post([FromBody] string value)
         {
-          if (_context.Rent == null)
-          {
-              return Problem("Entity set 'CarsRentalContext.Rent'  is null.");
-          }
-            _context.Rent.Add(rent);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetRent", new { id = rent.RentId }, rent);
         }
 
-        // DELETE: api/Rents/5
+        // PUT api/<RentsController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        // DELETE api/<RentsController>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRent(int id)
+        public void Delete(int id)
         {
-            if (_context.Rent == null)
-            {
-                return NotFound();
-            }
-            var rent = await _context.Rent.FindAsync(id);
-            if (rent == null)
-            {
-                return NotFound();
-            }
-
-            _context.Rent.Remove(rent);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool RentExists(int id)
-        {
-            return (_context.Rent?.Any(e => e.RentId == id)).GetValueOrDefault();
         }
     }
 }
