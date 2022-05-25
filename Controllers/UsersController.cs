@@ -32,6 +32,20 @@ namespace CarsRental.Controllers
             return await _context.User.ToListAsync();
         }
 
+        [HttpGet("{username}/{password}")]
+        public Boolean GetQuery(string username, string password)
+        {
+            try{
+                var dbEntry = _context.User.FirstOrDefault(acc => acc.UserName == username);
+                if(dbEntry.Password==password){
+                    return true;
+                }
+            }catch(Exception e){
+                return false;
+            }
+            return false;
+        }
+
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
